@@ -11,14 +11,22 @@ import json
 import sys
 from pathlib import Path
 
-from lunch_order_agent.models import OrderIntent
+from lunch_order_agent.models import AmazonScenario, OrderIntent
 from lunch_order_agent.pipeline import build_plan, provider_registry
+from lunch_order_agent.providers.amazon import AmazonPurchaseProvider
 
 
 def load_intent(path: Path) -> OrderIntent:
     """설정 파일을 읽어 주문 의도 모델로 변환한다."""
 
     return OrderIntent.from_dict(json.loads(path.read_text(encoding="utf-8")))
+
+
+def load_amazon_scenarios(path: Path) -> list[AmazonScenario]:
+    """Amazon A/B 테스트 설정 파일을 읽는다."""
+
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    return [AmazonScenario.from_dict(item) for item in raw["scenarios"]]
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -30,6 +38,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--dry-run", action="store_true", help="Print the plan and do not touch apps.")
     parser.add_argument("--format", choices=["text", "json"], default="text")
     parser.add_argument("--list-providers", action="store_true")
+    parser.add_argument("--amazon-ab-config", type=Path)
+    parser.add_argument("--amazon-scenario", default="all")
     return parser
 
 
@@ -40,6 +50,41 @@ def main(argv: list[str] | None = None) -> int:
     if args.list_providers:
         for provider in sorted(provider_registry()):
             print(provider)
+        print("amazon_purchase")
+        return 0
+
+    if args.provider == "amazon_purchase":
+        if not args.amazon_ab_config:
+            print("--amazon-ab-config is required for amazon_purchase", file=sys.stderr)
+            return 2
+        scenarios = load_amazon_scenarios(args.amazon_ab_config)
+        selected = [
+            scenario
+            for scenario in scenarios
+            if args.amazon_scenario == "all" or scenario.label == args.amazon_scenario
+        ]
+        if not selected:
+            print(f"No Amazon scenario matched: {args.amazon_scenario}", file=sys.stderr)
+            return 2
+        provider = AmazonPurchaseProvider()
+        if args.format == "json":
+            payload = [
+                {
+                    "dry_run": provider.dry_run(scenario).as_dict(),
+                    "plan": provider.build_plan(scenario).as_dict(),
+                }
+                for scenario in selected
+            ]
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            for index, scenario in enumerate(selected, start=1):
+                if index > 1:
+                    print("\n" + "=" * 80 + "\n")
+                result = provider.dry_run(scenario)
+                print(f"Amazon dry-run: {result.scenario}")
+                print(f"Runnable: {result.runnable}")
+                print(f"Search URL: {result.search_url}\n")
+                print(provider.build_plan(scenario).as_text())
         return 0
 
     intent = load_intent(args.config)
@@ -60,4 +105,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -123,3 +123,45 @@ class OrderPlan:
             "safety_gates": self.safety_gates,
         }
 
+
+@dataclass(frozen=True)
+class AmazonScenario:
+    """역할/목적/맥락: Amazon Fresh/일반 상품 A/B 테스트 한 케이스를 표현한다."""
+
+    label: str
+    category: str
+    channel: str
+    platform: str
+    search_terms: list[str]
+    required_any_keywords: list[str]
+    forbidden_keywords: list[str]
+    max_price: float
+    currency: str
+    address_label: str
+    delivery_constraints: list[str]
+    payment_policy: PaymentPolicy
+
+    @classmethod
+    def from_dict(cls, raw: dict[str, Any]) -> "AmazonScenario":
+        """설정 JSON의 scenario 항목을 dataclass로 변환한다."""
+
+        payment = raw["payment_policy"]
+        return cls(
+            label=raw["label"],
+            category=raw["category"],
+            channel=raw["channel"],
+            platform=raw["platform"],
+            search_terms=list(raw["search_terms"]),
+            required_any_keywords=list(raw["required_any_keywords"]),
+            forbidden_keywords=list(raw.get("forbidden_keywords", [])),
+            max_price=float(raw["max_price"]),
+            currency=raw["currency"],
+            address_label=raw["address_label"],
+            delivery_constraints=list(raw["delivery_constraints"]),
+            payment_policy=PaymentPolicy(
+                preferred_method_contains=payment["preferred_method_contains"],
+                forbidden_method_contains=list(payment["forbidden_method_contains"]),
+                require_manual_payment=bool(payment.get("require_manual_payment", True)),
+                stop_before_payment=bool(payment.get("stop_before_payment", True)),
+            ),
+        )

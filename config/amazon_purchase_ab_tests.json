@@ -1,0 +1,137 @@
+{
+  "label": "amazon-purchase-ab-tests",
+  "scenarios": [
+    {
+      "label": "fresh-high-protein-salad-mac",
+      "category": "grocery",
+      "channel": "fresh",
+      "platform": "mac_web",
+      "search_terms": ["high protein salad", "chicken breast", "ready to eat"],
+      "required_any_keywords": ["protein", "chicken", "salad"],
+      "forbidden_keywords": ["subscribe", "bulk case"],
+      "max_price": 14.0,
+      "currency": "USD",
+      "address_label": "company",
+      "delivery_constraints": [
+        "Fresh 배송창이 없으면 실패로 기록하고 주문 진행 금지",
+        "배송비/팁/세금 포함 총액은 checkout 직전 사람이 재확인"
+      ],
+      "payment_policy": {
+        "preferred_method_contains": "Shinhan",
+        "forbidden_method_contains": ["KB", "Kookmin"],
+        "require_manual_payment": true,
+        "stop_before_payment": true
+      }
+    },
+    {
+      "label": "fresh-high-protein-salad-iphone",
+      "category": "grocery",
+      "channel": "fresh",
+      "platform": "iphone_app",
+      "search_terms": ["high protein salad", "smoked duck", "chicken breast"],
+      "required_any_keywords": ["protein", "duck", "chicken", "salad"],
+      "forbidden_keywords": ["subscribe", "bulk case"],
+      "max_price": 14.0,
+      "currency": "USD",
+      "address_label": "company",
+      "delivery_constraints": [
+        "iPhone 앱에서 Fresh/Whole Foods 진입이 안 되면 mac_web variant로 fallback",
+        "Face ID/Touch ID/보안 확인은 사용자 수동 처리"
+      ],
+      "payment_policy": {
+        "preferred_method_contains": "Shinhan",
+        "forbidden_method_contains": ["KB", "Kookmin"],
+        "require_manual_payment": true,
+        "stop_before_payment": true
+      }
+    },
+    {
+      "label": "furniture-ergonomic-chair-mac",
+      "category": "furniture",
+      "channel": "retail",
+      "platform": "mac_web",
+      "search_terms": ["ergonomic office chair", "adjustable lumbar"],
+      "required_any_keywords": ["ergonomic", "office", "chair"],
+      "forbidden_keywords": ["used", "renewed"],
+      "max_price": 200.0,
+      "currency": "USD",
+      "address_label": "company",
+      "delivery_constraints": [
+        "대형 가구 배송일/조립 옵션/반품 비용은 checkout 직전 확인",
+        "설치 서비스나 add-on warranty는 자동 선택 금지"
+      ],
+      "payment_policy": {
+        "preferred_method_contains": "Shinhan",
+        "forbidden_method_contains": ["KB", "Kookmin"],
+        "require_manual_payment": true,
+        "stop_before_payment": true
+      }
+    },
+    {
+      "label": "electronics-usbc-charger-mac",
+      "category": "electronics",
+      "channel": "retail",
+      "platform": "mac_web",
+      "search_terms": ["USB C charger", "65W GaN", "PD"],
+      "required_any_keywords": ["65W", "GaN", "USB C", "PD"],
+      "forbidden_keywords": ["sponsored bundle only", "for parts"],
+      "max_price": 45.0,
+      "currency": "USD",
+      "address_label": "company",
+      "delivery_constraints": [
+        "전기/충전기 제품은 정격, 안전 인증, 판매자 평판을 사람이 확인",
+        "Same-Day 표시가 검색 결과와 checkout에서 모두 유지되는지 확인"
+      ],
+      "payment_policy": {
+        "preferred_method_contains": "Shinhan",
+        "forbidden_method_contains": ["KB", "Kookmin"],
+        "require_manual_payment": true,
+        "stop_before_payment": true
+      }
+    },
+    {
+      "label": "clothing-basic-shirt-iphone",
+      "category": "clothing",
+      "channel": "retail",
+      "platform": "iphone_app",
+      "search_terms": ["men basic white t shirt", "cotton"],
+      "required_any_keywords": ["shirt", "cotton", "white"],
+      "forbidden_keywords": ["final sale", "non returnable"],
+      "max_price": 30.0,
+      "currency": "USD",
+      "address_label": "company",
+      "delivery_constraints": [
+        "사이즈/색상/반품 가능 여부는 사용자 확인",
+        "앱에서 Buy Now가 강조되어도 Add to Cart/Cart 검토 경로만 사용"
+      ],
+      "payment_policy": {
+        "preferred_method_contains": "Shinhan",
+        "forbidden_method_contains": ["KB", "Kookmin"],
+        "require_manual_payment": true,
+        "stop_before_payment": true
+      }
+    },
+    {
+      "label": "household-paper-towels-mac",
+      "category": "household",
+      "channel": "retail",
+      "platform": "mac_web",
+      "search_terms": ["paper towels", "select a size"],
+      "required_any_keywords": ["paper", "towels"],
+      "forbidden_keywords": ["subscribe only"],
+      "max_price": 35.0,
+      "currency": "USD",
+      "address_label": "company",
+      "delivery_constraints": [
+        "Subscribe & Save가 기본 선택이면 one-time purchase로 바꾸기 전에는 진행 금지",
+        "대량 묶음은 단가와 보관 가능성을 사용자에게 표시"
+      ],
+      "payment_policy": {
+        "preferred_method_contains": "Shinhan",
+        "forbidden_method_contains": ["KB", "Kookmin"],
+        "require_manual_payment": true,
+        "stop_before_payment": true
+      }
+    }
+  ]
+}

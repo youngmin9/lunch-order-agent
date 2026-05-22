@@ -39,6 +39,13 @@ lunch-order-agent --config config/hyehwa_poke_lunch.json --provider doordash --d
 lunch-order-agent --config config/hyehwa_poke_lunch.json --provider deliveroo --dry-run
 ```
 
+Amazon Fresh 및 일반 Amazon 상품 구매 A/B 플랜을 확인합니다.
+
+```bash
+lunch-order-agent --provider amazon_purchase --amazon-ab-config config/amazon_purchase_ab_tests.json --dry-run
+lunch-order-agent --provider amazon_purchase --amazon-ab-config config/amazon_purchase_ab_tests.json --amazon-scenario electronics-usbc-charger-mac --format json
+```
+
 지원 provider 목록을 봅니다.
 
 ```bash
@@ -69,6 +76,7 @@ launchctl load ~/Library/LaunchAgents/com.youngmin9.lunch-order-agent.plist
 - 카드번호, 배민 계정, 배달 주소 원문을 저장하지 않습니다.
 - 비공개 API 리버스엔지니어링을 하지 않습니다.
 - 결제를 자동 클릭하지 않습니다.
+- Amazon `Buy Now`, `Place your order`, `1-Click`, `Subscribe & Save` 확정 버튼은 자동 클릭하지 않습니다.
 - 메뉴 품절, 배달비, 최소주문금액, 옵션 추가금이 있으면 사용자 확인으로 전환합니다.
 - 앱 화면 인식이 실패하면 fallback으로 주문 후보와 체크리스트만 출력합니다.
 
@@ -77,3 +85,4 @@ launchctl load ~/Library/LaunchAgents/com.youngmin9.lunch-order-agent.plist
 - [Architecture](docs/architecture.md)
 - [iPhone Mirroring Runbook](docs/iphone-mirroring-runbook.md)
 - [Global Delivery Pipeline](docs/global-delivery-pipeline.md)
+- [Amazon Purchase Pipeline](docs/amazon-purchase-pipeline.md)
