@@ -1,0 +1,23 @@
+[project]
+name = "lunch-order-agent"
+version = "0.1.0"
+description = "Manual-payment lunch ordering planner for Baemin iPhone Mirroring and global delivery apps"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "youngmin9" }]
+dependencies = []
+
+[project.scripts]
+lunch-order-agent = "lunch_order_agent.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lunch_order_agent"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+

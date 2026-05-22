@@ -1,0 +1,29 @@
+{
+  "label": "hyehwa-poke-workday-lunch",
+  "schedule": {
+    "days": ["mon", "tue", "wed", "thu", "fri"],
+    "time": "11:00",
+    "timezone": "Asia/Seoul"
+  },
+  "service_area": "혜화",
+  "store_query_terms": ["혜화 포케", "혜화 샐러드", "샐러링 혜화", "포케 혜화"],
+  "required_any_keywords": ["고단백", "닭가슴살", "오리훈제", "샐러드", "포케"],
+  "preferred_keywords": ["고단백", "닭가슴살", "오리훈제", "샐러드"],
+  "max_item_price_krw": 14000,
+  "address_label": "회사",
+  "payment_policy": {
+    "preferred_method_contains": "신한",
+    "forbidden_method_contains": ["KB", "국민"],
+    "require_manual_payment": true,
+    "stop_before_payment": true
+  },
+  "providers": [
+    "baemin_iphone_mirroring",
+    "amazon_fresh",
+    "uber_eats",
+    "doordash",
+    "deliveroo",
+    "generic_delivery_app"
+  ]
+}
+
